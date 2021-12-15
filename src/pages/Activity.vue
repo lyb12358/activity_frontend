@@ -60,15 +60,15 @@
                 :color="props.row.isDel == 0 ? 'positive' : 'negative'"
               />
             </q-td>
-            <q-td key="gmtExpiry" :props="props">{{
-              formatDate(props.row.gmtExpiry)
-            }}</q-td>
-            <q-td key="gmtCreate" :props="props">{{
-              formatDate(props.row.gmtCreate)
-            }}</q-td>
-            <q-td key="gmtModified" :props="props">{{
-              formatDate(props.row.gmtModified)
-            }}</q-td>
+            <q-td key="gmtExpiry" :props="props">
+              {{ formatDate(props.row.gmtExpiry) }}
+            </q-td>
+            <q-td key="gmtCreate" :props="props">
+              {{ formatDate(props.row.gmtCreate) }}
+            </q-td>
+            <q-td key="gmtModified" :props="props">
+              {{ formatDate(props.row.gmtModified) }}
+            </q-td>
           </q-tr>
           <q-tr v-show="props.expand" :props="props">
             <q-td colspan="100%">
@@ -171,10 +171,8 @@
     <q-dialog v-model="detailOpened" persistent>
       <q-card style="width: 1000px; max-width: 80vw">
         <q-toolbar class="bg-white text-teal">
-          <q-toolbar-title
-            ><span class="text-h5 text-weight-bold">{{
-              dialogActiveName
-            }}</span>
+          <q-toolbar-title>
+            <span class="text-h5 text-weight-bold">{{ dialogActiveName }}</span>
           </q-toolbar-title>
         </q-toolbar>
         <q-card-section style="max-height: 70vh" class="scroll">
@@ -225,13 +223,13 @@
                 <q-icon name="mdi-account-box-outline" />
               </template>
               <template v-slot:option="scope">
-                <q-item v-bind="scope.itemProps"
-                  ><q-item-section
-                    ><q-item-label>{{ scope.opt.label }}</q-item-label>
-                    <q-item-label caption
-                      >创建人{{ scope.opt.name }}</q-item-label
-                    ></q-item-section
-                  >
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ scope.opt.label }}</q-item-label>
+                    <q-item-label caption>
+                      创建人{{ scope.opt.name }}
+                    </q-item-label>
+                  </q-item-section>
                 </q-item>
               </template>
             </q-select>
@@ -273,7 +271,7 @@
                 </div>
               </q-popup-proxy>
               <template v-slot:prepend>
-                <q-icon name="colorize" class="cursor-pointer"> </q-icon>
+                <q-icon name="colorize" class="cursor-pointer"></q-icon>
               </template>
             </q-input>
             <q-select
@@ -291,13 +289,13 @@
                 <q-icon name="mdi-account-box-outline" />
               </template>
               <template v-slot:option="scope">
-                <q-item v-bind="scope.itemProps"
-                  ><q-item-section
-                    ><q-item-label>{{ scope.opt.label }}</q-item-label>
-                    <q-item-label caption
-                      >创建人{{ scope.opt.name }}</q-item-label
-                    ></q-item-section
-                  >
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ scope.opt.label }}</q-item-label>
+                    <q-item-label caption>
+                      创建人{{ scope.opt.name }}
+                    </q-item-label>
+                  </q-item-section>
                 </q-item>
               </template>
             </q-select>
@@ -380,11 +378,11 @@
                 </q-date>
               </q-popup-proxy>
               <template v-slot:prepend>
-                <q-icon name="event" class="cursor-pointer"> </q-icon>
+                <q-icon name="event" class="cursor-pointer"></q-icon>
               </template>
             </q-input>
           </q-card-section>
-          <q-card-section class="row q-col-gutter-md"> </q-card-section>
+          <q-card-section class="row q-col-gutter-md"></q-card-section>
           <q-separator inset />
         </q-card-section>
         <q-card-actions align="right" class="bg-white text-teal">
@@ -402,8 +400,7 @@
             label="确定"
           />
         </q-card-actions>
-        ></q-card
-      >
+      </q-card>
     </q-dialog>
     <!-- search dialog -->
     <q-dialog v-model="searchDetailOpened" persistent>
@@ -475,9 +472,11 @@
                     :src="api + element"
                     style="width: 80px; height: 80px"
                     class="rounded-borders"
-                    ><q-badge floating @click="removeAt(index)">
-                      <q-icon name="close" color="white" /> </q-badge
-                  ></q-img>
+                  >
+                    <q-badge floating @click="removeAt(index)">
+                      <q-icon name="close" color="white" />
+                    </q-badge>
+                  </q-img>
                 </div>
               </template>
             </draggable>

@@ -31,15 +31,16 @@
                 @click="props.expand = !props.expand"
               />
             </q-td>
-            <q-td key="customAvatar" :props="props"
-              ><img
+            <q-td key="customAvatar" :props="props">
+              <img
                 :src="props.row.customAvatar"
                 style="height: 50px; width: 50px"
-            /></q-td>
+              />
+            </q-td>
             <q-td key="mobile" :props="props">{{ props.row.mobile }}</q-td>
-            <q-td key="activityName" :props="props">{{
-              props.row.activityName
-            }}</q-td>
+            <q-td key="activityName" :props="props">
+              {{ props.row.activityName }}
+            </q-td>
             <q-td key="shopName" :props="props">{{ props.row.shopName }}</q-td>
             <q-td key="isVerified" :props="props">
               <q-icon
@@ -52,12 +53,12 @@
                 :color="props.row.isVerified == 1 ? 'positive' : 'amber-3'"
               />
             </q-td>
-            <q-td key="gmtCreate" :props="props">{{
-              formatDate(props.row.gmtCreate)
-            }}</q-td>
-            <q-td key="gmtModified" :props="props">{{
-              formatDate(props.row.gmtModified)
-            }}</q-td>
+            <q-td key="gmtCreate" :props="props">
+              {{ formatDate(props.row.gmtCreate) }}
+            </q-td>
+            <q-td key="gmtModified" :props="props">
+              {{ formatDate(props.row.gmtModified) }}
+            </q-td>
           </q-tr>
           <q-tr v-show="props.expand" :props="props">
             <q-td colspan="100%">
@@ -106,6 +107,15 @@
             icon="mdi-magnify"
             label="搜索"
             @click="searchDetailOpened = true"
+          />
+          <q-btn
+            color="primary"
+            style="margin-left: 8px"
+            size="sm"
+            icon="mdi-file-excel"
+            label="导出预约信息"
+            :loading="excelLoading"
+            @click="downloadExcel"
           />
         </template>
       </q-table>
@@ -185,6 +195,7 @@
 <script>
 import { date } from 'quasar'
 import { getAppointmentList, verifiedCodeById } from 'src/api/shopAndCustom'
+import { appointmentExport } from 'src/api/file'
 export default {
   data() {
     return {
@@ -269,7 +280,9 @@ export default {
       },
       serverData: [],
       detailDialogLoading: false,
-      searchDetailOpened: false
+      searchDetailOpened: false,
+      //excel
+      excelLoading: false
     }
   },
   methods: {
@@ -351,6 +364,37 @@ export default {
         .onDismiss(() => {
           // console.log('I am triggered on both OK and Cancel')
         })
+    },
+    //download excel
+    downloadExcel() {
+      this.excelLoading = true
+      appointmentExport(this.searchForm)
+        .then((response) => {
+          this.fileDownload(
+            response.data,
+            '预约信息导出' + this.formatDate(Date.now()) + '.xls'
+          )
+          this.excelLoading = false
+        })
+        .catch((error) => {
+          this.excelLoading = false
+        })
+    },
+    // public method to download file
+    fileDownload(data, name) {
+      if (!data) {
+        return
+      }
+      let url = window.URL.createObjectURL(new Blob([data]))
+      let link = document.createElement('a')
+      link.style.display = 'none'
+      link.href = url
+      link.setAttribute('download', name)
+      document.body.appendChild(link)
+      link.click()
+      // release url object
+      URL.revokeObjectURL(link.href)
+      document.body.removeChild(link)
     }
   },
   mounted() {

@@ -44,12 +44,12 @@
                 :color="props.row.status == 1 ? 'positive' : 'negative'"
               />
             </q-td>
-            <q-td key="gmtCreate" :props="props">{{
-              formatDate(props.row.gmtCreate)
-            }}</q-td>
-            <q-td key="gmtModified" :props="props">{{
-              formatDate(props.row.gmtModified)
-            }}</q-td>
+            <q-td key="gmtCreate" :props="props">
+              {{ formatDate(props.row.gmtCreate) }}
+            </q-td>
+            <q-td key="gmtModified" :props="props">
+              {{ formatDate(props.row.gmtModified) }}
+            </q-td>
           </q-tr>
           <q-tr v-show="props.expand" :props="props">
             <q-td colspan="100%">
@@ -59,6 +59,7 @@
                     dense
                     label="修改"
                     icon="mdi-pencil"
+                    v-show="props.row.type != 1"
                     @click="openDetailDialog('update', props.row.id)"
                   />
                   <q-btn
@@ -176,6 +177,10 @@
               v-model="user.type"
               emit-value
               label="角色"
+              v-show="
+                ($store.getters['user/userInfo'].type == 1 && user.type == 2) ||
+                ($store.getters['user/userInfo'].type != 1 && user.type == 3)
+              "
               map-options
               :options="
                 this.$store.getters['user/userInfo'].type == 1
@@ -185,6 +190,30 @@
             >
               <template v-slot:prepend>
                 <q-icon name="mdi-account-box-outline" />
+              </template>
+            </q-select>
+            <q-select
+              class="col-6"
+              outlined
+              v-model="user.shopId"
+              emit-value
+              label="门店"
+              map-options
+              v-show="this.$store.getters['user/userInfo'].type != 1"
+              :options="shopOptions"
+            >
+              <template v-slot:prepend>
+                <q-icon name="mdi-account-box-outline" />
+              </template>
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ scope.opt.label }}</q-item-label>
+                    <q-item-label caption>
+                      创建人{{ scope.opt.name }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
               </template>
             </q-select>
           </q-card-section>
@@ -269,6 +298,7 @@ import {
   addUser,
   getUserById
 } from 'src/api/userManage'
+import { getShopOptions } from 'src/api/shopAndCustom'
 // import useVuelidate from '@vuelidate/core'
 // import { required } from '@vuelidate/validators'
 export default {
@@ -350,6 +380,7 @@ export default {
         account: '',
         name: '',
         type: 2,
+        shopId: '',
         status: '',
         password: '111111'
       },
@@ -362,14 +393,6 @@ export default {
         {
           label: '普通管理员',
           value: 2
-        },
-        {
-          label: '店员',
-          value: 3
-        },
-        {
-          label: '游客',
-          value: 4
         }
       ],
       roleOptions2: [
@@ -377,7 +400,8 @@ export default {
           label: '店员',
           value: 3
         }
-      ]
+      ],
+      shopOptions: []
     }
   },
   methods: {
@@ -440,6 +464,10 @@ export default {
         }
         this.detailOpened = true
       } else {
+        if (id == this.$store.getters['user/userInfo'].id) {
+          this.notify('warning', '无法修改自身账号！')
+          return
+        }
         this.dialogActiveName = '修改用户'
         this.pwdInput = false
         getUserById(id)
@@ -521,6 +549,12 @@ export default {
     this.searchForm.type = this.$store.getters['user/userInfo'].type
     this.request({
       pagination: this.serverPagination
+    })
+    getShopOptions(
+      this.$store.getters['user/userInfo'].type,
+      this.$store.getters['user/userInfo'].id
+    ).then((response) => {
+      this.shopOptions = response.data.data
     })
   }
 }

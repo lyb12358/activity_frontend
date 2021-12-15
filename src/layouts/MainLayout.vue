@@ -41,9 +41,9 @@
               <img src="images/personal_logo.png" />
             </q-avatar>
 
-            <q-toolbar-title>{{
-              $store.getters['user/userInfo'].name
-            }}</q-toolbar-title>
+            <q-toolbar-title>
+              {{ $store.getters['user/userInfo'].name }}
+            </q-toolbar-title>
             <q-btn
               flat
               round
@@ -66,7 +66,7 @@
                 <q-item-section avatar>
                   <q-icon name="dashboard" />
                 </q-item-section>
-                <q-item-section> 主页 </q-item-section>
+                <q-item-section>主页</q-item-section>
               </q-item>
               <q-item
                 active-class="tab-active"
@@ -79,7 +79,7 @@
                 <q-item-section avatar>
                   <q-icon name="mdi-account-group" />
                 </q-item-section>
-                <q-item-section> 用户管理 </q-item-section>
+                <q-item-section>用户管理</q-item-section>
               </q-item>
               <q-item
                 active-class="tab-active"
@@ -93,7 +93,7 @@
                 <q-item-section avatar>
                   <q-icon name="mdi-account-key" />
                 </q-item-section>
-                <q-item-section> 角色管理 </q-item-section>
+                <q-item-section>角色管理</q-item-section>
               </q-item>
               <q-item
                 active-class="tab-active"
@@ -105,7 +105,7 @@
                 <q-item-section avatar>
                   <q-icon name="mdi-store" />
                 </q-item-section>
-                <q-item-section> 门店管理 </q-item-section>
+                <q-item-section>门店管理</q-item-section>
               </q-item>
               <q-item
                 active-class="tab-active"
@@ -117,7 +117,7 @@
                 <q-item-section avatar>
                   <q-icon name="mdi-ticket" />
                 </q-item-section>
-                <q-item-section> 活动管理 </q-item-section>
+                <q-item-section>活动管理</q-item-section>
               </q-item>
               <q-item
                 active-class="tab-active"
@@ -129,7 +129,7 @@
                 <q-item-section avatar>
                   <q-icon name="mdi-ticket-confirmation" />
                 </q-item-section>
-                <q-item-section> 预约信息管理 </q-item-section>
+                <q-item-section>预约信息管理</q-item-section>
               </q-item>
               <q-item
                 active-class="tab-active"
@@ -137,11 +137,12 @@
                 class="q-ma-sm navigation-item"
                 clickable
                 v-ripple
+                v-show="this.$store.getters['user/userInfo'].type == 1"
               >
                 <q-item-section avatar>
                   <q-icon name="mdi-face-agent" />
                 </q-item-section>
-                <q-item-section> 客户管理 </q-item-section>
+                <q-item-section>客户管理</q-item-section>
               </q-item>
               <q-item
                 active-class="tab-active"
@@ -153,7 +154,7 @@
                 <q-item-section avatar>
                   <q-icon name="mdi-music" />
                 </q-item-section>
-                <q-item-section> 音乐管理 </q-item-section>
+                <q-item-section>音乐管理</q-item-section>
               </q-item>
               <q-item
                 active-class="tab-active"
@@ -166,7 +167,7 @@
                 <q-item-section avatar>
                   <q-icon name="mdi-cog" />
                 </q-item-section>
-                <q-item-section> 系统设置 </q-item-section>
+                <q-item-section>系统设置</q-item-section>
               </q-item>
             </q-list>
           </q-scroll-area>
@@ -207,9 +208,11 @@
                   :rules="[
                     (val) => (val && val.length >= 6) || '不能为空,最小6位'
                   ]"
-                  ><template v-slot:prepend>
-                    <q-icon name="mdi-account" /> </template
-                ></q-input>
+                >
+                  <template v-slot:prepend>
+                    <q-icon name="mdi-account" />
+                  </template>
+                </q-input>
                 <q-input
                   dense
                   v-model="password.password2"
@@ -219,9 +222,11 @@
                   :rules="[
                     (val) => (val && val.length >= 6) || '不能为空,最小6位'
                   ]"
-                  ><template v-slot:prepend>
-                    <q-icon name="mdi-account" /> </template
-                ></q-input>
+                >
+                  <template v-slot:prepend>
+                    <q-icon name="mdi-account" />
+                  </template>
+                </q-input>
               </q-card-section>
 
               <q-card-actions align="right" class="text-primary">
