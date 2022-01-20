@@ -68,6 +68,12 @@
                     icon="mdi-pencil"
                     @click="resetPassword(props.row.id, 111111)"
                   />
+                  <q-btn
+                    dense
+                    :label="props.row.status == 1 ? '冻结' : '启用'"
+                    :icon="props.row.status == 1 ? 'mdi-snowflake' : 'mdi-fire'"
+                    @click="changeStatus(props.row)"
+                  />
                   <!-- <q-btn label="启用/停用" icon="mdi-eraser" /> -->
                 </q-btn-group>
               </div>
@@ -542,6 +548,29 @@ export default {
         .onDismiss(() => {
           // console.log('I am triggered on both OK and Cancel')
         })
+    },
+    changeStatus(user) {
+      if (user.status == 1) {
+        user.status = 0
+        addUser(user)
+          .then((response) => {
+            this.notify('positive', response.data.msg)
+            this.request({
+              pagination: this.serverPagination
+            })
+          })
+          .catch((error) => {})
+      } else {
+        user.status = 1
+        addUser(user)
+          .then((response) => {
+            this.notify('positive', response.data.msg)
+            this.request({
+              pagination: this.serverPagination
+            })
+          })
+          .catch((error) => {})
+      }
     }
   },
   mounted() {
